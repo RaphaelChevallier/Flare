@@ -39,6 +39,9 @@ dependencies:
   flutter_radar: ^3.9.1
   google_maps_flutter: ^2.7.0
   permission_handler: ^11.3.1
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.1
+  flutter_map_cancellable_tile_provider: ^3.0.0-dev.1
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +64,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/map_styles.json
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

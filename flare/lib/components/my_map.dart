@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
+// import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_radar/flutter_radar.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-final Completer<GoogleMapController> _controller = Completer();
 
 class MyMap extends StatefulWidget {
   const MyMap({super.key});
@@ -18,18 +17,16 @@ class MyMap extends StatefulWidget {
 }
 
 class _MyMapState extends State<MyMap> {
-  late String _mapStyleString;
+  final String styleId = const String.fromEnvironment('MAPBOX_STYLE_ID');
+  final String username = const String.fromEnvironment('MAPBOX_USERNAME');
+  final String mapboxAccessToken =
+      const String.fromEnvironment('MAPBOX_ACCESS_TOKEN');
   late Future<LatLng> _locationFuture;
   bool _isRequestingPermission = false; // Track permission request state
 
   @override
   void initState() {
     super.initState();
-    rootBundle.loadString('assets/map_styles.json').then((string) {
-      setState(() {
-        _mapStyleString = string;
-      });
-    });
     _locationFuture = _getLocation(); // Initialize the future
   }
 
@@ -78,17 +75,23 @@ class _MyMapState extends State<MyMap> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
-          return GoogleMap(
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            initialCameraPosition: CameraPosition(
-              target: snapshot.data!,
-              zoom: 15.0,
-            ),
-            style: _mapStyleString,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+          return Stack(
+            children: [
+              FlutterMap(
+                options: MapOptions(
+                  initialCenter: snapshot.data!,
+                  initialZoom: 15.0,
+                ),
+                children: [
+                  // CurrentLocationLayer(),
+                  TileLayer(
+                    urlTemplate:
+                        'https://api.mapbox.com/styles/v1/$username/$styleId/tiles/512/{z}/{x}/{y}@2x?access_token=$mapboxAccessToken',
+                    userAgentPackageName: 'com.example.flare',
+                  ),
+                ],
+              ),
+            ],
           );
         } else {
           return const Center(child: Text('Location not available'));
