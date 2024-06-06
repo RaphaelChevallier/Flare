@@ -25,7 +25,7 @@ class MyDrawer extends StatelessWidget {
                 children: [
                   DrawerHeader(
                       child: Center(
-                    child: Icon(Icons.local_shipping_rounded,
+                    child: Icon(Icons.flare_rounded,
                         color: Theme.of(context).colorScheme.primary, size: 40),
                   )),
                   Padding(

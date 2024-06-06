@@ -2,6 +2,7 @@ import 'package:flare/auth/auth_gate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_radar/flutter_radar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'themes/dark_mode.dart';
@@ -9,12 +10,14 @@ import 'themes/light_mode.dart';
 
 const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const supabaseKey = String.fromEnvironment('SUPABASE_KEY');
+const radarPublicKey = String.fromEnvironment('RADAR_PK');
 
 Future<void> main() async {
   await Supabase.initialize(
     url: supabaseUrl,
     anonKey: supabaseKey,
   );
+  await Radar.initialize(radarPublicKey);
   runApp(const MyApp());
 }
 

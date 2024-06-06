@@ -49,7 +49,7 @@ class RegisterPageMobileScaffold extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //logo
-            Icon(Icons.local_shipping_rounded,
+            Icon(Icons.flare_rounded,
                 size: 60, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 50),
             //welcome message

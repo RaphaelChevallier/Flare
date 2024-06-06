@@ -1,15 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ThemeData darkMode = ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: ColorScheme.dark(
-        surface: Colors.grey[800]!,
-        primary: Colors.deepOrange,
-        secondary: Colors.deepOrangeAccent));
+  brightness: Brightness.dark,
+  colorScheme: const ColorScheme.dark(
+    primary: Color(0xFFFF8A65), // Lighter Orange
+    secondary: Color(0xFF64B5F6), // Lighter Blue
+    surface: Color(0xFF121212), // Dark Gray
+    tertiary: Color(0xFFFFCC80),
+  ),
+  appBarTheme: const AppBarTheme(
+    systemOverlayStyle:
+        SystemUiOverlayStyle.light, // Ensures light icons on dark background
+  ),
+);
 
-CupertinoThemeData darkModeCupertino = CupertinoThemeData(
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: Colors.grey[800]!,
-    primaryColor: Colors.deepOrange,
-    primaryContrastingColor: Colors.deepOrangeAccent);
+CupertinoThemeData darkModeCupertino = const CupertinoThemeData(
+  brightness: Brightness.dark,
+  scaffoldBackgroundColor: Color(0xFF121212), // Dark Gray
+  primaryColor: Color(0xFFFF8A65), // Lighter Orange
+  primaryContrastingColor: Color(0xFF64B5F6),
+);
