@@ -1,4 +1,3 @@
-// my_map.dart
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -14,48 +13,14 @@ class MyMap extends StatefulWidget {
 
   final LatLng _defaultCenter = const LatLng(45.521563, -122.677433);
 
-  Future<LatLng> getLocation() async {
-    final permissionStatus = await Permission.location.status;
-
-    if (permissionStatus.isGranted) {
-      final coordinates = await Radar.getLocation();
-      if (coordinates != null &&
-          coordinates['location']['latitude'] != null &&
-          coordinates['location']['longitude'] != null) {
-        return LatLng(coordinates['location']['latitude'],
-            coordinates['location']['longitude']);
-      } else {
-        return _defaultCenter; // Default location if coordinates are null or invalid
-      }
-    } else if (permissionStatus.isDenied ||
-        permissionStatus.isPermanentlyDenied ||
-        permissionStatus.isRestricted ||
-        permissionStatus.isLimited) {
-      final newStatus = await Permission.location.request();
-      if (newStatus.isGranted) {
-        final coordinates = await Radar.getLocation();
-        if (coordinates != null &&
-            coordinates['location']['latitude'] != null &&
-            coordinates['location']['longitude'] != null) {
-          return LatLng(coordinates['location']['latitude'],
-              coordinates['location']['longitude']);
-        } else {
-          return _defaultCenter; // Default location if coordinates are null or invalid
-        }
-      } else {
-        return _defaultCenter; // Default location if permission is not granted
-      }
-    }
-
-    return _defaultCenter; // Default location if permission is not granted
-  }
-
   @override
   State<MyMap> createState() => _MyMapState();
 }
 
 class _MyMapState extends State<MyMap> {
   late String _mapStyleString;
+  late Future<LatLng> _locationFuture;
+  bool _isRequestingPermission = false; // Track permission request state
 
   @override
   void initState() {
@@ -65,12 +30,45 @@ class _MyMapState extends State<MyMap> {
         _mapStyleString = string;
       });
     });
+    _locationFuture = _getLocation(); // Initialize the future
+  }
+
+  Future<LatLng> _getLocation() async {
+    if (_isRequestingPermission) return widget._defaultCenter;
+
+    setState(() {
+      _isRequestingPermission = true;
+    });
+
+    try {
+      PermissionStatus permissionStatus = await Permission.location.status;
+
+      if (!permissionStatus.isGranted) {
+        permissionStatus = await Permission.location.request();
+      }
+
+      if (permissionStatus.isGranted) {
+        final coordinates = await Radar.getLocation();
+        if (coordinates != null &&
+            coordinates['location']['latitude'] != null &&
+            coordinates['location']['longitude'] != null) {
+          return LatLng(coordinates['location']['latitude'],
+              coordinates['location']['longitude']);
+        }
+      }
+
+      return widget._defaultCenter;
+    } finally {
+      setState(() {
+        _isRequestingPermission = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LatLng>(
-      future: widget.getLocation(),
+      future: _locationFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

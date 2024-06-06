@@ -10,15 +10,19 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        backgroundColor: Colors.transparent,
-        material: (_, __) =>
-            MaterialAppBarData(forceMaterialTransparency: true),
-      ),
+          backgroundColor: Colors.transparent,
+          material: (_, __) =>
+              MaterialAppBarData(forceMaterialTransparency: true),
+          cupertino: (_, __) => CupertinoNavigationBarData(
+                backgroundColor: Colors.transparent,
+                border: null,
+              )),
       material: (_, __) => MaterialScaffoldData(
         extendBodyBehindAppBar: true,
         body: const MyMap(),
         drawer: const MyDrawer(),
       ),
+      cupertino: (_, __) => CupertinoPageScaffoldData(body: const MyMap()),
     );
   }
 }

@@ -33,7 +33,10 @@ class MyTextField extends StatelessWidget {
                   hintText: hintText,
                   hintStyle:
                       TextStyle(color: Theme.of(context).colorScheme.primary))),
-          cupertino: (_, __) => CupertinoTextFieldData(),
+          cupertino: (_, __) => CupertinoTextFieldData(
+            obscureText: obscureText,
+            controller: controller,
+          ),
         ));
   }
 }
