@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-// import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:flutter_radar/flutter_radar.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -45,13 +45,9 @@ class _MyMapState extends State<MyMap> {
       }
 
       if (permissionStatus.isGranted) {
-        final coordinates = await Radar.getLocation();
-        if (coordinates != null &&
-            coordinates['location']['latitude'] != null &&
-            coordinates['location']['longitude'] != null) {
-          return LatLng(coordinates['location']['latitude'],
-              coordinates['location']['longitude']);
-        }
+        final Position coordinates = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best);
+        return LatLng(coordinates.latitude, coordinates.longitude);
       }
 
       return widget._defaultCenter;
@@ -83,11 +79,26 @@ class _MyMapState extends State<MyMap> {
                   initialZoom: 15.0,
                 ),
                 children: [
-                  // CurrentLocationLayer(),
                   TileLayer(
                     urlTemplate:
                         'https://api.mapbox.com/styles/v1/$username/$styleId/tiles/512/{z}/{x}/{y}@2x?access_token=$mapboxAccessToken',
                     userAgentPackageName: 'com.example.flare',
+                  ),
+                  CurrentLocationLayer(
+                    alignPositionOnUpdate: AlignOnUpdate.never,
+                    alignDirectionOnUpdate: AlignOnUpdate.never,
+                    style: const LocationMarkerStyle(
+                      marker: DefaultLocationMarker(
+                        child: Icon(
+                          Icons.navigation,
+                          color: Colors.white,
+                          size: 10,
+                        ),
+                      ),
+                      markerSize: Size(20, 20),
+                      showHeadingSector: false,
+                      markerDirection: MarkerDirection.heading,
+                    ),
                   ),
                 ],
               ),

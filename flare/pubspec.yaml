@@ -36,12 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.6
   supabase_flutter: ^2.5.4
   flutter_platform_widgets: ^7.0.0
-  flutter_radar: ^3.9.1
-  google_maps_flutter: ^2.7.0
   permission_handler: ^11.3.1
   flutter_map: ^7.0.0
   latlong2: ^0.9.1
   flutter_map_cancellable_tile_provider: ^3.0.0-dev.1
+  flutter_map_location_marker: ^9.0.0
+  geolocator: ^12.0.0
 
 dev_dependencies:
   flutter_test:

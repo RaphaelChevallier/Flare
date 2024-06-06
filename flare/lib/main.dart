@@ -2,7 +2,7 @@ import 'package:flare/auth/auth_gate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_radar/flutter_radar.dart';
+// import 'package:flutter_radar/flutter_radar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'themes/dark_mode.dart';
@@ -17,7 +17,7 @@ Future<void> main() async {
     url: supabaseUrl,
     anonKey: supabaseKey,
   );
-  await Radar.initialize(radarPublicKey);
+  // await Radar.initialize(radarPublicKey);
   runApp(const MyApp());
 }
 
